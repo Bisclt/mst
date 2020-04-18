@@ -55,7 +55,8 @@ class Graph {
   double distance_between(int idx1, int idx2) const;
 
   // draw a line between two points using opencv
-  void draw_single_line(cv::Mat img, cv::Point2d start, cv::Point2d end);
+  void draw_single_line(cv::Mat img, cv::Point2d start, cv::Point2d end,
+                        std::string color);
 
  public:
   Graph() {}

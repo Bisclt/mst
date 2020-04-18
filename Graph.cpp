@@ -12,18 +12,20 @@
 
 /*======================CGAL header files======================*/
 
+#include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/Constrained_triangulation_2.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Polygon_2.h>
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/Triangulation_vertex_base_with_id_2.h>
 
+#include "CGAL/exceptions.h"
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Triangulation_vertex_base_with_id_2<K> Vb;
 typedef CGAL::Constrained_triangulation_face_base_2<K> Fb;
 typedef CGAL::Triangulation_data_structure_2<Vb, Fb> TDS;
 typedef CGAL::Exact_predicates_tag Itag;
-typedef CGAL::Constrained_triangulation_2<K, TDS, Itag> CDT;
-typedef CDT::Point Point;
+typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag> CDT;
 typedef CDT::Face_iterator Face_iterator;
 typedef CDT::Vertex_handle Vertex_handle;
 
@@ -43,7 +45,7 @@ void Graph::generate_points_and_constraints_from_file(
   for (int i = 0; i < num_of_points; ++i) {
     double x, y;
     fin >> x >> y;
-    points_.emplace_back(x, y);
+    points_.push_back(SimplePoint(x, y));
   }
 
   // Deal with constraints.
@@ -106,24 +108,20 @@ double Graph::distance_between(int idx1, int idx2) const {
 }
 
 void Graph::do_constrained_delaunay_triangulation() {
-  CDT cdt;
+  CDT cdt{};
 
-  // int nop = num_of_points_;
-  // std::cout << "There are " << nop << " points.\n";
   for (int i = 0; i < num_of_points_; ++i) {
     double x = points_[i].x();
     double y = points_[i].y();
-    cdt.insert(Point(x, y));
+    cdt.insert(CDT::Point(x, y));
   }
 
-  // int noc = constraints_.size();
-  // std::cout << "There are " << noc << " constraints.\n";
   for (int i = 0; i < constraints_.size(); ++i) {
     double x1 = points_[constraints_[i].first].x();
     double y1 = points_[constraints_[i].first].y();
     double x2 = points_[constraints_[i].second].x();
     double y2 = points_[constraints_[i].second].y();
-    cdt.insert_constraint(Point(x1, y1), Point(x2, y2));
+    cdt.insert_constraint(CDT::Point(x1, y1), CDT::Point(x2, y2));
   }
 
   // Initialize the indexes of points.
@@ -131,21 +129,16 @@ void Graph::do_constrained_delaunay_triangulation() {
   for (CDT::Vertex_iterator v = cdt.vertices_begin(); v != cdt.vertices_end();
        ++v) {
     Vertex_handle vv = v->handle();
-    vv->id() = idx;
-    idx++;
+    vv->id() = idx++;
   }
 
-  // CGAL does the triangulation.
   for (auto e_iter = cdt.finite_edges_begin(); e_iter != cdt.finite_edges_end();
        e_iter++) {
     CDT::Vertex_handle f_v1 = e_iter->first->vertex(cdt.cw(e_iter->second));
     CDT::Vertex_handle f_v2 = e_iter->first->vertex(cdt.ccw(e_iter->second));
 
-    Point p1 = f_v1->point();
-    Point p2 = f_v2->point();
-
-    int i1 = e_iter->first->vertex(cdt.cw(e_iter->second))->id();
-    int i2 = e_iter->first->vertex(cdt.ccw(e_iter->second))->id();
+    int i1 = f_v1->id();
+    int i2 = f_v2->id();
 
     // std::cout << i1 << " " << i2 << std::endl;
 
@@ -173,12 +166,19 @@ void Graph::draw() {
     SimplePoint p1 = points_[edges_.top().second.idx1()];
     SimplePoint p2 = points_[edges_.top().second.idx2()];
     double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();
-    std::cout << "(" << x1 << ", " << y1 << ") --- (" << x2 << ", " << y2
-              << ")\n";
+    // std::cout << "(" << x1 << ", " << y1 << ") --- (" << x2 << ", " << y2
+    //           << ")\n";
 
     // draw a single line between p1 and p2
-    draw_single_line(image, cv::Point(x1, y1), cv::Point(x2, y2));
+    draw_single_line(image, cv::Point(x1, y1), cv::Point(x2, y2), "white");
     edges_.pop();
+  }
+
+  for (int i = 0; i < constraints_.size(); ++i) {
+    SimplePoint p1 = points_[constraints_[i].first];
+    SimplePoint p2 = points_[constraints_[i].second];
+    double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();
+    draw_single_line(image, cv::Point(x1, y1), cv::Point(x2, y2), "blue");
   }
 
   // output the result graph in a new window
@@ -187,7 +187,8 @@ void Graph::draw() {
   cv::waitKey(0);
 }
 
-void Graph::draw_single_line(cv::Mat img, cv::Point2d start, cv::Point2d end) {
+void Graph::draw_single_line(cv::Mat img, cv::Point2d start, cv::Point2d end,
+                             std::string color) {
   // width of line
   int thickness = 1;
 
@@ -195,5 +196,8 @@ void Graph::draw_single_line(cv::Mat img, cv::Point2d start, cv::Point2d end) {
   int lineType = cv::LineTypes::LINE_8;
 
   // draw a white line between start and end
-  cv::line(img, start, end, cv::Scalar(255, 255, 255), thickness, lineType);
+  if (color == "white")
+    cv::line(img, start, end, cv::Scalar(255, 255, 255), thickness, lineType);
+  else if (color == "blue")
+    cv::line(img, start, end, cv::Scalar(255, 0, 0), thickness, lineType);
 }

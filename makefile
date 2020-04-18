@@ -12,7 +12,7 @@ $(TARGET): $(OBJECTS) $(HEADERS)
 	@echo "Now Compiling $< ..."
 	g++ -I. -c $< -o $@
 clean:
-	rm *.o *.exe *.bak
+	rm *.o *.exe *.bak main
 explain:
 	@echo "Headers: $(HEADERS)"
 	@echo "Sources: $(SOURCES)"

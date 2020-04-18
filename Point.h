@@ -6,7 +6,7 @@ class SimplePoint {
   double x_, y_;
 
  public:
-  SimplePoint() = delete;
+  SimplePoint() = default;
   SimplePoint(double x, double y) : x_(x), y_(y) {}
   double x() const { return x_; }
   double y() const { return y_; }
