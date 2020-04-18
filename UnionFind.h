@@ -9,13 +9,26 @@ class UnionFind {
   std::vector<int> parent_;
 
  public:
-  UnionFind() = default;  // Default size is 0.
-  UnionFind(int num);     // Designate the size of the union-find set.
-  void set(int num);      // Designate the size of the union-find set.
+  // Default size is 0.
+  UnionFind() = default;
+
+  // Designate the size of the union-find set.
+  UnionFind(int num);
+
+  // Designate the size of the union-find set.
+  void set(int num);
+
   ~UnionFind() = default;
+
+  // union to points with indexes idx1 and idx2
   void union_between(int idx1, int idx2);
+
   int find(int idx);
+
+  // chech if point idx1 and idx2 are already connected
   bool unioned(int idx1, int idx2) const;
+
+  // return the number of all points
   int size() const { return num_; }
 };
 

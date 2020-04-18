@@ -107,16 +107,18 @@ double Graph::distance_between(int idx1, int idx2) const {
 
 void Graph::do_constrained_delaunay_triangulation() {
   CDT cdt;
-  int nop = num_of_points_;
-  std::cout << "There are " << nop << " points.\n";
-  for (int i = 0; i < nop; ++i) {
+
+  // int nop = num_of_points_;
+  // std::cout << "There are " << nop << " points.\n";
+  for (int i = 0; i < num_of_points_; ++i) {
     double x = points_[i].x();
     double y = points_[i].y();
     cdt.insert(Point(x, y));
   }
-  int noc = constraints_.size();
-  std::cout << "There are " << noc << " constraints.\n";
-  for (int i = 0; i < noc; ++i) {
+
+  // int noc = constraints_.size();
+  // std::cout << "There are " << noc << " constraints.\n";
+  for (int i = 0; i < constraints_.size(); ++i) {
     double x1 = points_[constraints_[i].first].x();
     double y1 = points_[constraints_[i].first].y();
     double x2 = points_[constraints_[i].second].x();
@@ -173,15 +175,25 @@ void Graph::draw() {
     double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();
     std::cout << "(" << x1 << ", " << y1 << ") --- (" << x2 << ", " << y2
               << ")\n";
+
+    // draw a single line between p1 and p2
     draw_single_line(image, cv::Point(x1, y1), cv::Point(x2, y2));
     edges_.pop();
   }
+
+  // output the result graph in a new window
   cv::imshow("Constrained Triangulation", image);
+
   cv::waitKey(0);
 }
 
 void Graph::draw_single_line(cv::Mat img, cv::Point2d start, cv::Point2d end) {
+  // width of line
   int thickness = 1;
+
+  // type of line
   int lineType = cv::LineTypes::LINE_8;
+
+  // draw a white line between start and end
   cv::line(img, start, end, cv::Scalar(255, 255, 255), thickness, lineType);
 }
