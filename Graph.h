@@ -25,8 +25,6 @@ struct cmp_dis_edge_pair {
 
 class Graph {
  protected:
-  // std::vector<SimpleEdge> edges_;
-
   // a container of all the points in the graph
   std::vector<SimplePoint> points_;
 
@@ -74,7 +72,7 @@ class Graph {
   // randomly generate num points in a square of size, to keep
   // points not too close, size must be not smaller than 100;
   // num must not be large than 10000.
-  void random_generate_points(int num = 50, double size = 1000.0);
+  void random_generate_points(int num = 200, double size = 1000.0);
 
   // randomly generate num constraints, the number of constraints
   // should not be more than square root of the number of points.

@@ -11,7 +11,7 @@ class MST : public Graph {
   double total_length_{};
 
  public:
-  // based on the constrained delaunay triangulation, using prim algorithm to
+  // based on the constrained delaunay triangulation, using kruskal algorithm to
   // calculate the desired MST with constraints. ATTENTION: this function will
   // remove everything stored in the edges_ vector
   void generate_mst_from_cdt();
