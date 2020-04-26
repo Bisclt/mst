@@ -45,7 +45,7 @@ void Graph::generate_points_and_constraints_from_file(
   for (int i = 0; i < num_of_points; ++i) {
     double x, y;
     fin >> x >> y;
-    points_.push_back(SimplePoint(x, y));
+    points_.emplace_back(x, y);
   }
 
   // Deal with constraints.
@@ -54,7 +54,7 @@ void Graph::generate_points_and_constraints_from_file(
   for (int i = 0; i < num_of_constraints; ++i) {
     int idx1, idx2;
     fin >> idx1 >> idx2;
-    assert(!uf_.unioned(idx1, idx2));
+    assert(!unioned(idx1, idx2));
     make_constraint(idx1, idx2);
     make_edge(idx1, idx2);
   }
@@ -83,11 +83,13 @@ void Graph::random_generate_constraints(int num) {
     do {
       idx1 = rand() % size;
       idx2 = rand() % size;
-    } while (uf_.unioned(idx1, idx2));
+    } while (unioned(idx1, idx2));
     make_constraint(idx1, idx2);
     make_edge(idx1, idx2);
   }
 }
+
+bool Graph::unioned(int idx1, int idx2) { return uf_.unioned(idx1, idx2); }
 
 void Graph::make_constraint(int idx1, int idx2) {
   uf_.union_between(idx1, idx2);
@@ -96,8 +98,7 @@ void Graph::make_constraint(int idx1, int idx2) {
 
 void Graph::make_edge(int idx1, int idx2) {
   uf_.union_between(idx1, idx2);
-  edges_.emplace(distance_between(idx1, idx2), SimpleEdge(idx1, idx2));
-  // edges_.emplace_back(SimpleEdge(idx1, idx2));
+  edges_.push({distance_between(idx1, idx2), SimpleEdge(idx1, idx2)});
 }
 
 double Graph::distance_between(int idx1, int idx2) const {
@@ -150,7 +151,7 @@ void Graph::draw() {
     SimplePoint p2 = points_[edges_.top().second.idx2()];
     double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();
 
-    // draw a single line between p1 and p2
+    // draw a single white line between p1 and p2
     draw_single_line(image, cv::Point(x1, y1), cv::Point(x2, y2), "white");
     edges_.pop();
   }
@@ -159,6 +160,8 @@ void Graph::draw() {
     SimplePoint p1 = points_[constraints_[i].first];
     SimplePoint p2 = points_[constraints_[i].second];
     double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();
+
+    // draw a single blue line between two constrained points
     draw_single_line(image, cv::Point(x1, y1), cv::Point(x2, y2), "blue");
   }
 

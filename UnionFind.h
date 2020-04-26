@@ -26,10 +26,13 @@ class UnionFind {
   int find(int idx);
 
   // chech if point idx1 and idx2 are already connected
-  bool unioned(int idx1, int idx2) const;
+  bool unioned(int idx1, int idx2);
 
   // return the number of all points
   int size() const { return num_; }
+
+  // initialize the uf-set
+  void clean();
 };
 
 #endif

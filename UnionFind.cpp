@@ -1,6 +1,7 @@
 #include "UnionFind.h"
 
 #include <cassert>
+#include <iostream>
 #include <vector>
 
 UnionFind::UnionFind(int num) : num_(num) {
@@ -19,9 +20,9 @@ int UnionFind::find(int idx) {
   return (parent_[idx] == idx ? idx : parent_[idx] = find(parent_[idx]));
 }
 
-bool UnionFind::unioned(int idx1, int idx2) const {
+bool UnionFind::unioned(int idx1, int idx2) {
   assert(idx1 < size() && idx2 < size());
-  return parent_[idx1] == parent_[idx2];
+  return find(idx1) == find(idx2);
 }
 
 void UnionFind::set(int num) {
@@ -29,5 +30,11 @@ void UnionFind::set(int num) {
   parent_.clear();
   for (int i = 0; i < num; ++i) {
     parent_.emplace_back(i);
+  }
+}
+
+void UnionFind::clean() {
+  for (int i = 0; i < size(); ++i) {
+    parent_[i] = i;
   }
 }

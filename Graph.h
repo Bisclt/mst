@@ -24,7 +24,7 @@ struct cmp_dis_edge_pair {
 };
 
 class Graph {
- private:
+ protected:
   // std::vector<SimpleEdge> edges_;
 
   // a container of all the points in the graph
@@ -45,6 +45,9 @@ class Graph {
   std::priority_queue<dis_edge_pair, std::vector<dis_edge_pair>,
                       cmp_dis_edge_pair>
       edges_;
+
+  // check if two points have been unioned
+  bool unioned(int idx1, int idx2);
 
   // connect point idx1 and idx2, idx1 and idx2 should not be equal
   void make_edge(int idx1, int idx2);
@@ -68,21 +71,18 @@ class Graph {
   // be in the same directory as main.cpp
   void generate_points_and_constraints_from_file(const std::string& file_name);
 
-  // Randomly generate num points in a square of size, to keep
+  // randomly generate num points in a square of size, to keep
   // points not too close, size must be not smaller than 100;
   // num must not be large than 10000.
-  void random_generate_points(int num = 100, double size = 1000.0);
+  void random_generate_points(int num = 50, double size = 1000.0);
 
-  // Randomly generate num constraints, the number of constraints
+  // randomly generate num constraints, the number of constraints
   // should not be more than square root of the number of points.
   void random_generate_constraints(int num = 1);
 
   void do_constrained_delaunay_triangulation();
 
-  // // A test function, output the edges in ascii format to terminal
-  // void output_edge();
-
-  // Draw Points and Edges using opencv
+  // draw Points and Edges using opencv
   void draw();
 };
 
