@@ -77,8 +77,8 @@ class Graph {
 
   void do_constrained_delaunay_triangulation();
 
-  // A test function, output the edges in ascii format to terminal
-  void output_edge();
+  // // A test function, output the edges in ascii format to terminal
+  // void output_edge();
 
   // Draw Points and Edges using opencv
   void draw();

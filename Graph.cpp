@@ -150,15 +150,16 @@ void Graph::do_constrained_delaunay_triangulation() {
   }
 }
 
-void Graph::output_edge() {
-  while (!edges_.empty()) {
-    SimplePoint p1 = points_[edges_.top().second.idx1()];
-    SimplePoint p2 = points_[edges_.top().second.idx2()];
-    std::cout << "(" << p1.x() << ", " << p1.y() << ") --- (" << p2.x() << ", "
-              << p2.y() << ")\n";
-    edges_.pop();
-  }
-}
+// void Graph::output_edge() {
+//   while (!edges_.empty()) {
+//     SimplePoint p1 = points_[edges_.top().second.idx1()];
+//     SimplePoint p2 = points_[edges_.top().second.idx2()];
+//     std::cout << "(" << p1.x() << ", " << p1.y() << ") --- (" << p2.x() << ",
+//     "
+//               << p2.y() << ")\n";
+//     edges_.pop();
+//   }
+// }
 
 void Graph::draw() {
   cv::Mat image = cv::Mat::zeros(width, width, CV_8UC3);
