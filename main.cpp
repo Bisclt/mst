@@ -10,7 +10,7 @@ int main() {
   std::cout << "Using brute force...\n";
 
   timer.start();
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < 6; ++i) {
     MST mst{};
 
     // randomly generate 1000 points in a square of size 2000
@@ -31,7 +31,7 @@ int main() {
 
   std::cout << "\nBased on constrained delaunay triangulation...\n";
   timer.start();
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < 6; ++i) {
     MST mst{};
 
     // randomly generate 1000 points in a square of size 2000

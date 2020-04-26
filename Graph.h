@@ -77,7 +77,7 @@ class Graph {
   // randomly generate num points in a square of size, to keep
   // points not too close, size must be not smaller than 100;
   // num must not be large than 10000.
-  void random_generate_points(int num = 1000, double size = width);
+  void random_generate_points(int num = 5000, double size = width);
 
   // randomly generate num constraints, the number of constraints
   // should not be more than square root of the number of points.
