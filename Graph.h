@@ -17,9 +17,9 @@ using dis_edge_pair = std::pair<double, SimpleEdge>;
 struct cmp_dis_edge_pair {
   bool operator()(dis_edge_pair a, dis_edge_pair b) {
     if (a.first != b.first)
-      return a.first < b.first;
+      return a.first > b.first;
     else
-      return a.second.idx1() < b.second.idx2();
+      return a.second.idx1() > b.second.idx2();
   }
 };
 
