@@ -14,7 +14,10 @@ class MST : public Graph {
   // based on the constrained delaunay triangulation, using kruskal algorithm to
   // calculate the desired MST with constraints. ATTENTION: this function will
   // remove everything stored in the edges_ vector
-  void generate_mst_from_cdt();
+  void generate_mst_from_edges();
+
+  // generate the MST using BRUTE FORCE
+  void generate_mst_brute_force();
 
   // draw the final MST using opencv
   void draw();

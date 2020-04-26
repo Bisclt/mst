@@ -24,6 +24,11 @@ struct cmp_dis_edge_pair {
 };
 
 class Graph {
+ private:
+  // be aware that the randomly generated constraints should not have
+  // intersections
+  bool no_intersection_with_previous_constraints(int idx1, int idx2);
+
  protected:
   // a container of all the points in the graph
   std::vector<SimplePoint> points_;

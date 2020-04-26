@@ -66,7 +66,6 @@ void Graph::random_generate_points(int num, double size) {
   num_of_points_ = num;
   uf_.set(num_of_points_);
   points_.clear();
-  srand(time(nullptr));
   for (int i = 0; i < num; ++i) {
     double ld1 = rand() / double(RAND_MAX);
     double ld2 = rand() / double(RAND_MAX);
@@ -77,16 +76,30 @@ void Graph::random_generate_points(int num, double size) {
 void Graph::random_generate_constraints(int num) {
   int size = points_.size();
   assert(num * num <= size);
-  srand(time(nullptr));
   for (int i = 0; i < num; ++i) {
     int idx1, idx2;
     do {
       idx1 = rand() % size;
       idx2 = rand() % size;
-    } while (unioned(idx1, idx2));
+    } while (unioned(idx1, idx2) ||
+             !no_intersection_with_previous_constraints(idx1, idx2));
     make_constraint(idx1, idx2);
     make_edge(idx1, idx2);
   }
+}
+
+bool Graph::no_intersection_with_previous_constraints(int idx1, int idx2) {
+  for (auto& ce : constraints_) {
+    int i1 = ce.first, i2 = ce.second;
+    double x1 = points_[i1].x(), y1 = points_[i1].y();
+    double x2 = points_[i2].x(), y2 = points_[i2].y();
+    double x3 = points_[idx1].x(), y3 = points_[idx1].y();
+    double x4 = points_[idx2].x(), y4 = points_[idx2].y();
+    CDT::Segment seg1{CDT::Point{x1, y1}, CDT::Point{x2, y2}};
+    CDT::Segment seg2{CDT::Point{x3, y3}, CDT::Point{x4, y4}};
+    if (CGAL::do_intersect(seg1, seg2)) return false;
+  }
+  return true;
 }
 
 bool Graph::unioned(int idx1, int idx2) { return uf_.unioned(idx1, idx2); }

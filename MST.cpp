@@ -2,11 +2,13 @@
 
 #include <iostream>
 
-void MST::generate_mst_from_cdt() {
+void MST::generate_mst_from_edges() {
   uf_.clean();
 
   for (int i = 0; i < constraints_.size(); ++i) {
     make_mst_edge(constraints_[i].first, constraints_[i].second);
+    total_length_ +=
+        sqrt(distance_between(constraints_[i].first, constraints_[i].second));
   }
   while (!edges_.empty()) {
     double len = edges_.top().first;
@@ -15,7 +17,17 @@ void MST::generate_mst_from_cdt() {
     edges_.pop();
     if (unioned(idx1, idx2)) continue;
     make_mst_edge(idx1, idx2);
+    total_length_ += sqrt(len);
   }
+}
+
+void MST::generate_mst_brute_force() {
+  for (int i = 0; i < num_of_points_; ++i) {
+    for (int j = i + 1; j < num_of_points_; ++j) {
+      edges_.push({distance_between(i, j), SimpleEdge(i, j)});
+    }
+  }
+  generate_mst_from_edges();
 }
 
 void MST::make_mst_edge(int idx1, int idx2) {
