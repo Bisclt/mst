@@ -4,7 +4,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
-const int width = 1000;
+const int width = 2000;
 #include <queue>
 #include <string>
 #include <vector>
@@ -72,11 +72,11 @@ class Graph {
   // randomly generate num points in a square of size, to keep
   // points not too close, size must be not smaller than 100;
   // num must not be large than 10000.
-  void random_generate_points(int num = 200, double size = 1000.0);
+  void random_generate_points(int num = 1000, double size = width);
 
   // randomly generate num constraints, the number of constraints
   // should not be more than square root of the number of points.
-  void random_generate_constraints(int num = 1);
+  void random_generate_constraints(int num = 10);
 
   void do_constrained_delaunay_triangulation();
 

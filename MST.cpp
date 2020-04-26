@@ -44,7 +44,7 @@ void MST::draw() {
   }
 
   // output the result graph in a new window
-  cv::imshow("Constrained Triangulation", image);
+  cv::imshow("Minimum Spanning Tree", image);
 
   cv::waitKey(0);
 }

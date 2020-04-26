@@ -140,6 +140,7 @@ void Graph::do_constrained_delaunay_triangulation() {
 
     int i1 = f_v1->id();
     int i2 = f_v2->id();
+    if (i1 >= num_of_points_ || i2 >= num_of_points_) continue;
     make_edge(i1, i2);
   }
 }
