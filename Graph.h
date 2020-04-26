@@ -12,10 +12,10 @@ const int width = 1000;
 #include "Edge.h"
 #include "Point.h"
 #include "UnionFind.h"
-using pde = std::pair<double, SimpleEdge>;
+using dis_edge_pair = std::pair<double, SimpleEdge>;
 
-struct cmpr {
-  bool operator()(pde a, pde b) {
+struct cmp_dis_edge_pair {
+  bool operator()(dis_edge_pair a, dis_edge_pair b) {
     if (a.first != b.first)
       return a.first < b.first;
     else
@@ -42,7 +42,9 @@ class Graph {
 
   // a containter of all edges (include both given constraints and edges of the
   // triangulation generated)
-  std::priority_queue<pde, std::vector<pde>, cmpr> edges_;
+  std::priority_queue<dis_edge_pair, std::vector<dis_edge_pair>,
+                      cmp_dis_edge_pair>
+      edges_;
 
   // connect point idx1 and idx2, idx1 and idx2 should not be equal
   void make_edge(int idx1, int idx2);

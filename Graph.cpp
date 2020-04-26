@@ -139,27 +139,9 @@ void Graph::do_constrained_delaunay_triangulation() {
 
     int i1 = f_v1->id();
     int i2 = f_v2->id();
-
-    // std::cout << i1 << " " << i2 << std::endl;
-
-    // std::cout << "(" << p1.x() << "," << p1.y() << ")"
-    //           << " ";
-    // std::cout << "(" << p2.x() << "," << p2.y() << ")" << std::endl;
-
     make_edge(i1, i2);
   }
 }
-
-// void Graph::output_edge() {
-//   while (!edges_.empty()) {
-//     SimplePoint p1 = points_[edges_.top().second.idx1()];
-//     SimplePoint p2 = points_[edges_.top().second.idx2()];
-//     std::cout << "(" << p1.x() << ", " << p1.y() << ") --- (" << p2.x() << ",
-//     "
-//               << p2.y() << ")\n";
-//     edges_.pop();
-//   }
-// }
 
 void Graph::draw() {
   cv::Mat image = cv::Mat::zeros(width, width, CV_8UC3);
@@ -167,8 +149,6 @@ void Graph::draw() {
     SimplePoint p1 = points_[edges_.top().second.idx1()];
     SimplePoint p2 = points_[edges_.top().second.idx2()];
     double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();
-    // std::cout << "(" << x1 << ", " << y1 << ") --- (" << x2 << ", " << y2
-    //           << ")\n";
 
     // draw a single line between p1 and p2
     draw_single_line(image, cv::Point(x1, y1), cv::Point(x2, y2), "white");
